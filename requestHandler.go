@@ -8,17 +8,18 @@ import (
 	//"net/url"
 	"strconv"
 	"time"
+	"encoding/json"
 )
 
 func main() {
 
 	//setDescription("test6", "test description", time.Now(), "Pizza", "Pasta", "Chilli", "Soup")
-	setVote("test6", "test comment", "1", "0", "0", "0", "0")
-	setVote("test6", "test comment", "1", "0", "0", "0", "0")
-	setVote("test6", "test comment", "0", "0", "0", "1", "0")
+	//setVote("test6", "test comment", "1", "0", "0", "0", "0")
+	//setVote("test6", "test comment", "1", "0", "0", "0", "0")
+	//setVote("test6", "test comment", "0", "0", "0", "1", "0")
 
-	getDescripDB()
-	getVoteDB()
+	//getDescripDB()
+	getPooDB()
 
 	//	http.HandleFunc("/", testOut)
 
@@ -98,6 +99,8 @@ func getDescripDB() {
 	fmt.Println("response Headers:", resp.Header)
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println("response Body:", string(body))
+
+	
 }
 
 func getVoteDB() {
@@ -114,6 +117,27 @@ func getVoteDB() {
 	fmt.Println("response Headers:", resp.Header)
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println("response Body:", string(body))
+}
+
+func getPooDB() {
+
+	query := "select+SUM(v1),+SUM(v2),+SUM(v3),+SUM(v4),+SUM(NotA)+from+test6;"
+	url := "http://178.62.74.225:8086/db/test/series?q=" + query + "&u=root&p=root"
+
+	client := &http.Client{}
+	resp, err := client.Get(url)
+	handleErr(err)
+	defer resp.Body.Close()
+
+	fmt.Println("response Status:", resp.Status)
+	fmt.Println("response Headers:", resp.Header)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println("response Body:", string(body))
+
+	slcB, _ := json.Marshal(string(body))
+    	fmt.Println(string(slcB))
+	fmt.Println(slcB.points[1])
+	fmt.Println(slcB.points[2])
 }
 
 func handleErr(err error) {
