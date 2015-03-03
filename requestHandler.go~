@@ -17,8 +17,7 @@ func main() {
 	setVote("test6", "test comment", "1", "0", "0", "0", "0")
 	setVote("test6", "test comment", "0", "0", "0", "1", "0")
 
-	getDescripDB()
-	getVoteDB()
+	getFromDB()
 
 	//	http.HandleFunc("/", testOut)
 
